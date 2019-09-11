@@ -1,2 +1,22 @@
-# query
-# github repo
+<html>
+<head>
+<!-- https://raw.githubusercontent.com/FriedrichMueller/WD2GB/master/wikidata-sdk.js -->
+  <script src="wikidata-sdk.js"> </script>
+</head>
+
+<body>
+  <pre id="output"></pre>
+  <script>
+    query = "SELECT ?compound ?cas WHERE { ?compound wdt:P231 ?cas } LIMIT 2"
+    fetch(
+      wdk.sparqlQuery(query)
+    ).then( response => response.json()
+    ).then( wdk.simplify.sparqlResults
+    ).then(
+      function (response) {
+        document.getElementById('output').innerHTML =
+          JSON.stringify(response, undefined, 2);
+      }
+    )
+  </script>
+</body>
