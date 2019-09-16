@@ -1,22 +1,123 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<!-- https://raw.githubusercontent.com/FriedrichMueller/WD2GB/master/wikidata-sdk.js -->
-  <script src="wikidata-sdk.js"> </script>
+<meta charset="utf-8">
+<title>WikiData query</title>
+
+<!-- Initialize a global WBK function -->
+<script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
+
+<!-- Initialize a global wdk object using the WBK object -->
+<script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
 </head>
 
 <body>
   <pre id="output"></pre>
+  <div id="my_dataviz"></div>
   <script>
-    query = "SELECT ?compound ?cas WHERE { ?compound wdt:P231 ?cas } LIMIT 2"
+  
+<!-- the folloqing query tries to return a list of different human genes with taxon counts  -->
+query = "SELECT ?genesLabel (COUNT (?genes) AS ?taxoncount) WHERE{ \
+?genes wdt:P31 wd:Q7187 . \
+?genes wdt:P703 wd:Q15978631 . \
+?genes wdt:P684 ?orth . \
+?orth  wdt:P703 ?taxon . \
+SERVICE wikibase:label { bd:serviceParam wikibase:language 'en' } \
+} \
+GROUP BY ?taxoncount ?genesLabel \
+LIMIT 1000"
+
+ <!-- the following part gets information from wikidata using the query   -->
     fetch(
       wdk.sparqlQuery(query)
     ).then( response => response.json()
     ).then( wdk.simplify.sparqlResults
     ).then(
       function (response) {
-        document.getElementById('output').innerHTML =
-          JSON.stringify(response, undefined, 2);
+       <!--   document.getElementById('output').innerHTML = JSON.stringify(response, undefined, 2);  -->
+		  DataoutJSON = response;
+		  DataoutSTRING = JSON.stringify(response, undefined, 2);
+		  
+		  <!-- this is old dataset "children": [{"Name":"Olives","Count":4319}]  https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168 new contrains taxoncount and genesLabel -->
+		  <!-- interesting stuff:   nodes.descendants()[1].data.genesLabel  -->
+		  dataset = [];
+		dataset.children = DataoutJSON;
+        diameter = 1000;
+        color = d3.scaleOrdinal(d3.schemeCategory20);
+
+        bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        svg = d3.select("body")
+            .append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .attr("class", "bubble");
+
+        nodes = d3.hierarchy(dataset)
+            .sum(function(d) { return d.taxoncount; });
+
+        node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        node.append("title")
+            .text(function(d) {
+                return d.genesLabel + ": " + d.taxoncount;
+            });
+
+        node.append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d,i) {
+                return color(i);
+            });
+
+        node.append("text")
+            .attr("dy", ".2em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.genesLabel.substring(0, d.r / 3);
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        node.append("text")
+            .attr("dy", "1.3em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.taxoncount;
+            })
+            .attr("font-family",  "Gill Sans", "Gill Sans MT")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        d3.select(self.frameElement)
+            .style("height", diameter + "px");
+			
+			
       }
     )
+
   </script>
 </body>
+</html>
