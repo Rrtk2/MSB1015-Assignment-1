@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>WikiData query</title>
+
+		<!-- META info -->
+		<meta charset="utf-8">
+		<meta name="description" content="A query program used to awnser a specific biological question using WikiData API.">
+
+		<!-- Initialize a global WBK function -->
+		<script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
+
+		<!-- Initialize a global wdk object using the WBK object -->
+		<script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
+
+		<!-- Load d3.js for vizualisation-->
+		<script src="https://d3js.org/d3.v4.js"></script>
+	</head>
+
+
+	<body>
+		<!-- SCRIPTS -->
+			<!-- Define query call -->
+			<script src="Query-call.js"></script>
+			<!-- Use query call to extract information and visualize -->
+			<script src="Query-main.js"></script>
+
+		<!-- PAGE LAYOUT -->
+			<h1> WikiData query call </h1>
+			<br>
+			<h4> Using the WikiData query service to awnser the following biological question: <br> "How many human genes have ortologs?" </h4>
+			<p> See the GitHub repository <a href="https://github.com/Rrtk2/MSB1015-Assignment-1">MSB1015-Assignment-1</a> for the latest release and source code.</p>
+			
+			<br><br>
+			<h4> Figure 1: Pie chart </h4>
+			<!-- Separator for multiple images -->
+			<div id="fig_pie"></div>
+			
+			<br><br>
+			<h4> Figure 2: Bubble chart </h4>
+			<div id="fig_bubble"></div>
+			<!-- Use query call to extract information and visualize -->
+
+
+			<p><a href="https://github.com/Rrtk2/MSB1015-Assignment-1/blob/master/LICENSE.md">GNU GENERAL PUBLIC LICENSE</a></p>
+	</body>
+</html>
