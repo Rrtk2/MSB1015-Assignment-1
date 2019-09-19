@@ -44,11 +44,11 @@
 	.attr("dy", ".2em")
 	.style("text-anchor", "middle")
 	.text(function(d) {
-	return d.data.genesLabel.substring(0, d.r / 3);
+	return d.data.genesLabel.substring(0, d.r/3);
 	})
 	.attr("font-family", "sans-serif")
 	.attr("font-size", function(d){
-	return d.r/5;
+	return d.r/3;
 	})
 	.attr("fill", "white");
 

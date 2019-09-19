@@ -1,5 +1,5 @@
 <!-- SETTINGS  -->
-	diameter = 600;
+	diameter = 1000;
 
 <!-- FUNCTIONS  -->
 	<!-- Function to call scripts within script using: loadScript('path',function() {});  -->
@@ -56,7 +56,6 @@
 				
 				// Bubble
 				loadScript('Query-bubble.js', function() {});
-				
 				
 
 			<!--  END  -->	
