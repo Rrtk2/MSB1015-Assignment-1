@@ -2,7 +2,7 @@
 	diameter = 1000;
 
 <!-- FUNCTIONS  -->
-	<!-- Function to call scripts within script using: loadScript('path',function() {});  -->
+	// Function to call scripts within script using: loadScript('path',function() {});
 	function loadScript( url, callback ) {
 	  var script = document.createElement( "script" )
 	  script.type = "text/javascript";
@@ -24,7 +24,7 @@
 	}
 
 <!-- MAIN  -->
-	<!-- the following part gets information from wikidata using the QUERY   -->
+	// the following part gets information from wikidata using query call: query2
 	fetch(
 	wdk.sparqlQuery(query2)
 	).then( response => response.json()
@@ -33,33 +33,30 @@
 		function (response) {
 				// Convert data
 				dataset = response;
-						
-				// Pie
+					
+				// Pie image
 				loadScript('Query-pie.js', function() {});
-
-			<!--  END  -->	
 		}
 	)
-
+	// the following part gets information from wikidata using query call: query
 	fetch(
 	wdk.sparqlQuery(query)
 	).then( response => response.json()
 	).then( wdk.simplify.sparqlResults
 	).then(
 		function (response) {
+				// document.getElementById('output').innerHTML = JSON.stringify(response, undefined, 2);  // unused, just prompts JSON output to screen.				
 				// Convert data
-				// document.getElementById('output').innerHTML = JSON.stringify(response, undefined, 2);  // unused
 				DataoutJSON = response;
-				DataoutSTRING = JSON.stringify(response, undefined, 2);
-				dataset2 = [];
-				dataset2.children = DataoutJSON.map( function(d) { return { "genesLabel": d.genesLabel, "taxoncount":d.taxoncount}});
+				// DataoutSTRING = JSON.stringify(response, undefined, 2);  // unused, the opbject is directly used, no need to convert to string.
+
+				// Answer script 
+				loadScript('Query-answer.js', function() {});		
 				
 				// Bubble
 				loadScript('Query-bubble.js', function() {});
-				
-
-			<!--  END  -->	
 		}
 	)
+<!--  END OF SCRIPT  -->
 
 
