@@ -43,7 +43,7 @@ RRtK2 (owner and contributor)
 
 
 #### Status of project
-Final
+Final.
 
 
 #### Copyright and authors
